@@ -33,7 +33,7 @@ namespace LabelMaker.ViewModel
 
             MainInfo = new MainInfoViewModel(CanPrint, UpdateHorizons, Points);
 
-            Print = new RelayCommand(o => new PdfHelper(this.Path, MainInfo.Company, MainInfo.OrderNumber, Horizons.Select(x => x.LabelContent).ToArray()));
+            Print = new RelayCommand(o => new PdfHelper(this.Path, MainInfo.Company, Horizons.Select(x => x.LabelContent).ToArray()));
         }
 
         public void Points_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

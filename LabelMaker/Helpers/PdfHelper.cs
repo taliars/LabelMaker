@@ -1,27 +1,24 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
 using iText.Layout;
+using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 
-
 namespace LabelMaker.Helpers
 {
+
     public class PdfHelper
     {
         private const string DEJAVUSerif = "./src/ttf/DejaVuSerif.ttf";
 
-        public PdfHelper(string path, string company, string order, string[] labelContents)
+        public PdfHelper(string path, string company, string[] labelContents)
         {
-            // Must have write permissions to the path folder
-            var writer = new PdfWriter(path);
-            var pdf = new PdfDocument(writer);
-            var document = new Document(pdf);
-
-            document.SetFont(CreateFont(DEJAVUSerif));
+            var document = CreateDocument(path);
 
             foreach (var labelContent in labelContents)
             {
@@ -37,43 +34,122 @@ namespace LabelMaker.Helpers
                     UseShellExecute = true
                 }
             };
+
             p.Start();
         }
 
+        private Document CreateDocument(string path)
+        {
+            // Must have write permissions to the path folder
+            var writer = new PdfWriter(path);
+            var pdf = new PdfDocument(writer);
+            var document = new Document(pdf);
 
-        private PdfFont CreateFont(string font) =>
-            PdfFontFactory.CreateFont(font, PdfEncodings.IDENTITY_H);
+            document.SetFont(CreateFont(DEJAVUSerif));
+            document.SetFontSize(20);
+
+            return document;
+        }
 
         private Table CreateTable(string company, string labelContent)
         {
-            var cellValues = new string[] {
-                company,
-                "",
-                "Проба №",
-                labelContent,
-                "Проба",
-                "почвы (грунта)"
+            var cellDescriptions = new CellDescription[]
+            {
+                new CellDescription
+                {
+                    Content = company,
+                    TextAlignment = TextAlignment.CENTER,
+                    CellPosition = CellPosition.Top,
+                    ColumnSpan = 2
+                },
+                new CellDescription
+                {
+                    Content = "Проба №",
+                    TextAlignment = TextAlignment.RIGHT,
+                    CellPosition = CellPosition.CentralLeft
+                },
+                new CellDescription
+                {
+                    Content = labelContent,
+                    TextAlignment = TextAlignment.LEFT,
+                    CellPosition = CellPosition.CentralRight
+                },
+                new CellDescription
+                {
+                    Content ="Проба",
+                    TextAlignment = TextAlignment.RIGHT,
+                    CellPosition = CellPosition.BottomLeft
+                },
+                new CellDescription
+                {
+                    Content ="почвы (грунта)",
+                    TextAlignment = TextAlignment.RIGHT,
+                    CellPosition = CellPosition.BottomRight
+                },
             };
 
+            var table = new Table(2, false);
+            table.SetKeepTogether(true);
 
-            Table table = new Table(2, false);
-
-            foreach (var cellValue in cellValues)
+            foreach (var cellDescription in cellDescriptions)
             {
-                table.AddCell(CreateCell(cellValue));
+                var cell = CreateCell(cellDescription);
+                table.AddCell(cell);
             }
 
             table.SetMarginBottom(12.5f);
             table.SetMarginRight(12.5f);
+
             return table;
         }
 
-        private Cell CreateCell(string content)
-        {
-            return new Cell(1, 1)
-                .SetTextAlignment(TextAlignment.RIGHT)
-                .Add(new Paragraph(content));
+        private PdfFont CreateFont(string font) =>
+            PdfFontFactory.CreateFont(font, PdfEncodings.IDENTITY_H);
 
+        private Cell CreateCell(CellDescription cellDescription)
+        {
+            var cell = new Cell(1, cellDescription.ColumnSpan)
+                .SetTextAlignment(cellDescription.TextAlignment)
+                .Add(new Paragraph(cellDescription.Content));
+
+            SetBorder(cell, cellDescription.CellPosition);
+            return cell;
+        }
+
+        private static Cell SetBorder(Cell cell, CellPosition cellPosition)
+        {
+            cell.SetBorder(Border.NO_BORDER);
+            var border = new SolidBorder(1);
+
+            switch (cellPosition)
+            {
+                case CellPosition.Top:
+                    cell.SetBorderTop(border).SetBorderLeft(border).SetBorderRight(border);
+                    break;
+                case CellPosition.TopLeft:
+                    cell.SetBorderTop(border).SetBorderLeft(border);
+                    break;
+                case CellPosition.TopRight:
+                    cell.SetBorderTop(border).SetBorderRight(border);
+                    break;
+                case CellPosition.CentralLeft:
+                    cell.SetBorderLeft(border);
+                    break;
+                case CellPosition.CentralRight:
+                    cell.SetBorderRight(border);
+                    break;
+                case CellPosition.BottomLeft:
+                    cell.SetBorderBottom(border).SetBorderLeft(border);
+                    break;
+                case CellPosition.BottomRight:
+                    cell.SetBorderBottom(border).SetBorderRight(border);
+                    break;
+                default:
+                    throw new KeyNotFoundException();
+            }
+
+            return cell;
         }
     }
+
 }

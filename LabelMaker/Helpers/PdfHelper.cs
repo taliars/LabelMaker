@@ -20,11 +20,16 @@ namespace LabelMaker.Helpers
         {
             var document = CreateDocument(path);
 
+            var paragraph = new Paragraph();
+
             foreach (var labelContent in labelContents)
             {
                 var table = CreateTable(company, labelContent);
-                document.Add(table);
+                paragraph.Add(table);
             }
+
+            document.Add(paragraph);
+
             document.Close();
 
             var p = new Process
@@ -46,7 +51,9 @@ namespace LabelMaker.Helpers
             var document = new Document(pdf);
 
             document.SetFont(CreateFont(DEJAVUSerif));
-            document.SetFontSize(20);
+            document.SetFontSize(14f);
+            document.SetLeftMargin(10f);
+            document.SetRightMargin(10f);
 
             return document;
         }
@@ -97,8 +104,8 @@ namespace LabelMaker.Helpers
                 table.AddCell(cell);
             }
 
-            table.SetMarginBottom(12.5f);
-            table.SetMarginRight(12.5f);
+            table.SetMarginBottom(2.5f);
+            table.SetMarginRight(2.5f);
 
             return table;
         }

@@ -26,7 +26,7 @@ namespace LabelMaker
         {
             var dialog = new SaveFileDialog
             {
-                FileName = $"{viewModel.MainInfo.OrderNumber}.pdf"
+                FileName = $"Этикетки {viewModel.MainInfo.OrderNumber}.pdf"
             };
 
             if (dialog.ShowDialog() == true)

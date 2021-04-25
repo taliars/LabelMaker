@@ -8,6 +8,7 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using LabelMaker.Configuration;
 
 namespace LabelMaker.Helpers
 {
@@ -18,15 +19,17 @@ namespace LabelMaker.Helpers
         private const int DefaultColumnSpan = 1;
         private const int DefaultColumnCount = 1;
 
-        public PdfHelper(string path, string company, string[] labelContents)
+        public PdfHelper(string path,
+            AppSettings appSettings,
+            string[] labelContents)
         {
-            var document = CreateDocument(path);
+            var document = CreateDocument(path, appSettings.FontSize);
 
             var paragraph = new Paragraph();
 
             foreach (var labelContent in labelContents)
             {
-                var table = CreateTable(company, labelContent);
+                var table = CreateTable(appSettings.Company, labelContent);
                 paragraph.Add(table);
             }
 
@@ -45,7 +48,7 @@ namespace LabelMaker.Helpers
             p.Start();
         }
 
-        private Document CreateDocument(string path)
+        private static Document CreateDocument(string path, int fontSize)
         {
             // Must have write permissions to the path folder
             var writer = new PdfWriter(path);
@@ -53,14 +56,14 @@ namespace LabelMaker.Helpers
             var document = new Document(pdf);
 
             document.SetFont(CreateFont(DEJAVUSerif));
-            document.SetFontSize(14f);
+            document.SetFontSize(fontSize);
             document.SetLeftMargin(10f);
             document.SetRightMargin(10f);
 
             return document;
         }
 
-        private Table CreateTable(string company, string labelContent)
+        private static Table CreateTable(string company, string labelContent)
         {
             var cellDescriptions = new CellDescription[]
             {

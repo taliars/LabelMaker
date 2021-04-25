@@ -3,11 +3,7 @@
     internal enum CellPosition
     {
         Top,
-        TopLeft,
-        TopRight,
-        CentralLeft,
-        CentralRight,
-        BottomLeft,
-        BottomRight
+        Central,
+        Bottom
     }
 }

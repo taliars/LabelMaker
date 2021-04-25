@@ -11,10 +11,12 @@ using iText.Layout.Properties;
 
 namespace LabelMaker.Helpers
 {
-
     public class PdfHelper
     {
         private const string DEJAVUSerif = "./src/ttf/DejaVuSerif.ttf";
+        private const int DefaultRowSpan = 1;
+        private const int DefaultColumnSpan = 1;
+        private const int DefaultColumnCount = 1;
 
         public PdfHelper(string path, string company, string[] labelContents)
         {
@@ -65,39 +67,23 @@ namespace LabelMaker.Helpers
                 new CellDescription
                 {
                     Content = company,
-                    TextAlignment = TextAlignment.CENTER,
                     CellPosition = CellPosition.Top,
-                    ColumnSpan = 2
                 },
                 new CellDescription
                 {
-                    Content = "Проба №",
-                    TextAlignment = TextAlignment.RIGHT,
-                    CellPosition = CellPosition.CentralLeft
+                    Content = $"Проба № {labelContent}",
+                    CellPosition = CellPosition.Central,
                 },
                 new CellDescription
                 {
-                    Content = labelContent,
-                    TextAlignment = TextAlignment.LEFT,
-                    CellPosition = CellPosition.CentralRight
-                },
-                new CellDescription
-                {
-                    Content ="Проба",
-                    TextAlignment = TextAlignment.RIGHT,
-                    CellPosition = CellPosition.BottomLeft
-                },
-                new CellDescription
-                {
-                    Content ="почвы (грунта)",
-                    TextAlignment = TextAlignment.RIGHT,
-                    CellPosition = CellPosition.BottomRight
+                    Content ="Проба почвы (грунта)",
+                    CellPosition = CellPosition.Bottom
                 },
             };
 
-            var table = new Table(2, false);
-            table.SetKeepTogether(true);
-
+            var table = new Table(DefaultColumnCount, false)
+                .SetKeepTogether(true);
+           
             foreach (var cellDescription in cellDescriptions)
             {
                 var cell = CreateCell(cellDescription);
@@ -110,13 +96,13 @@ namespace LabelMaker.Helpers
             return table;
         }
 
-        private PdfFont CreateFont(string font) =>
+        private static PdfFont CreateFont(string font) =>
             PdfFontFactory.CreateFont(font, PdfEncodings.IDENTITY_H);
 
-        private Cell CreateCell(CellDescription cellDescription)
+        private static Cell CreateCell(CellDescription cellDescription)
         {
-            var cell = new Cell(1, cellDescription.ColumnSpan)
-                .SetTextAlignment(cellDescription.TextAlignment)
+            var cell = new Cell(DefaultRowSpan, DefaultColumnSpan)
+                .SetTextAlignment(TextAlignment.CENTER)
                 .Add(new Paragraph(cellDescription.Content));
 
             SetBorder(cell, cellDescription.CellPosition);
@@ -128,34 +114,13 @@ namespace LabelMaker.Helpers
             cell.SetBorder(Border.NO_BORDER);
             var border = new SolidBorder(1);
 
-            switch (cellPosition)
+            return cellPosition switch
             {
-                case CellPosition.Top:
-                    cell.SetBorderTop(border).SetBorderLeft(border).SetBorderRight(border);
-                    break;
-                case CellPosition.TopLeft:
-                    cell.SetBorderTop(border).SetBorderLeft(border);
-                    break;
-                case CellPosition.TopRight:
-                    cell.SetBorderTop(border).SetBorderRight(border);
-                    break;
-                case CellPosition.CentralLeft:
-                    cell.SetBorderLeft(border);
-                    break;
-                case CellPosition.CentralRight:
-                    cell.SetBorderRight(border);
-                    break;
-                case CellPosition.BottomLeft:
-                    cell.SetBorderBottom(border).SetBorderLeft(border);
-                    break;
-                case CellPosition.BottomRight:
-                    cell.SetBorderBottom(border).SetBorderRight(border);
-                    break;
-                default:
-                    throw new KeyNotFoundException();
-            }
-
-            return cell;
+                CellPosition.Top => cell.SetBorderTop(border).SetBorderLeft(border).SetBorderRight(border),
+                CellPosition.Central => cell.SetBorderLeft(border).SetBorderRight(border),
+                CellPosition.Bottom => cell.SetBorderBottom(border).SetBorderLeft(border).SetBorderRight(border),
+                _ => throw new KeyNotFoundException(),
+            };
         }
     }
 

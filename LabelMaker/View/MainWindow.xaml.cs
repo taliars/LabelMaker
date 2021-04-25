@@ -13,7 +13,7 @@ namespace LabelMaker
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        private MainViewModel viewModel;
+        private readonly MainViewModel viewModel;
 
         public MainWindow(IOptions<AppSettings> settings)
         {

@@ -1,6 +1,4 @@
-﻿using iText.Layout.Properties;
-
-namespace LabelMaker.Helpers
+﻿namespace LabelMaker.Helpers
 {
     internal class CellDescription
     {

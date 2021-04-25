@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-
-using LabelMaker.Common;
-
-namespace LabelMaker.Model
+﻿namespace LabelMaker.Model
 {
     public class MainInfo
     {

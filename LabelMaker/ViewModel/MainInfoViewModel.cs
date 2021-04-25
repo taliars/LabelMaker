@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 using LabelMaker.Common;
 using LabelMaker.Helpers;
@@ -10,13 +9,10 @@ namespace LabelMaker.ViewModel
 {
     public class MainInfoViewModel : PropertyChangedBase
     {
-        private MainInfo mainInfo;
-
-        private bool CanPrint;
-
-        private Action UpdateHorizons;
-
-        ICollection<PointViewModel> Points;
+        private readonly MainInfo mainInfo;
+        private readonly bool CanPrint;
+        private readonly Action UpdateHorizons;
+        readonly ICollection<PointViewModel> Points;
 
         public string Company
         {
@@ -73,11 +69,11 @@ namespace LabelMaker.ViewModel
             }
         }
 
-        public MainInfoViewModel(bool canPrint, Action updateHorizons, ICollection<PointViewModel> points)
+        public MainInfoViewModel(string company, bool canPrint, Action updateHorizons, ICollection<PointViewModel> points)
         {
             mainInfo = new MainInfo
             {
-                Company = "ООО «ТехноТерра»",
+                Company = company,
                 Year = DateTime.Now.Year
             };
 

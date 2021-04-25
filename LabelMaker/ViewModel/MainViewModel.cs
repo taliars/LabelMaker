@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 
 using LabelMaker.Common;
+using LabelMaker.Configuration;
 using LabelMaker.Helpers;
 
 namespace LabelMaker.ViewModel
@@ -24,14 +25,14 @@ namespace LabelMaker.ViewModel
 
         public string Path { get; set; }
 
-        public MainViewModel()
+        public MainViewModel(AppSettings appSettings)
         {
             Points = new ObservableCollection<PointViewModel>();
             Horizons = new ObservableCollection<HorizonViewModel>();
 
             Points.CollectionChanged += Points_CollectionChanged;
 
-            MainInfo = new MainInfoViewModel(CanPrint, UpdateHorizons, Points);
+            MainInfo = new MainInfoViewModel(appSettings.Company, CanPrint, UpdateHorizons, Points);
 
             Print = new RelayCommand(o => new PdfHelper(this.Path, MainInfo.Company, Horizons.Select(x => x.LabelContent).ToArray()));
         }

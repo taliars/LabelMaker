@@ -5,7 +5,7 @@ namespace LabelMaker.ViewModel
 {
     public class PointViewModel : PropertyChangedBase
     {
-        private Point point;
+        private readonly Point point;
 
         public int Number
         {
@@ -13,7 +13,7 @@ namespace LabelMaker.ViewModel
             set
             {
                 point.Number = value;
-                OnPropertyChanged("Number");
+                OnPropertyChanged(nameof(Number));
             }
         }
 
@@ -23,7 +23,7 @@ namespace LabelMaker.ViewModel
             set
             {
                 point.Horizons = value;
-                OnPropertyChanged("Horizons");
+                OnPropertyChanged(nameof(Horizons));
             }
         }
 

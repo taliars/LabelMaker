@@ -5,7 +5,7 @@ namespace LabelMaker.ViewModel
 {
     public class HorizonViewModel : PropertyChangedBase
     {
-        private Horizon horizon;
+        private readonly Horizon horizon;
 
         public string LabelContent
         {
@@ -13,20 +13,19 @@ namespace LabelMaker.ViewModel
             set
             {
                 horizon.LabelContent = value;
-                OnPropertyChanged("LabelContent");
+                OnPropertyChanged(nameof(LabelContent));
             }
         }
 
         public int PointNumber
         {
-            get => horizon.HorizonNumber;
+            get => horizon.PointNumber;
             set
             {
-                horizon.HorizonNumber = value;
-                OnPropertyChanged("HorizonNumber");
+                horizon.PointNumber = value;
+                OnPropertyChanged(nameof(PointNumber));
             }
         }
-
 
         public HorizonViewModel()
         {

@@ -1,9 +1,9 @@
 ﻿using System.Windows;
-
+using LabelMaker.Configuration;
 using LabelMaker.ViewModel;
 
 using MahApps.Metro.Controls;
-
+using Microsoft.Extensions.Options;
 using Microsoft.Win32;
 
 namespace LabelMaker
@@ -13,12 +13,12 @@ namespace LabelMaker
     /// </summary>
     public partial class MainWindow : MetroWindow
     {
-        MainViewModel viewModel;
+        private MainViewModel viewModel;
 
-        public MainWindow()
+        public MainWindow(IOptions<AppSettings> settings)
         {
             InitializeComponent();
-            viewModel = new MainViewModel();
+            viewModel = new MainViewModel(settings.Value);
             this.DataContext = viewModel;
         }
 
@@ -33,6 +33,6 @@ namespace LabelMaker
             {
                 viewModel.Path = dialog.FileName;
             }
-}
+        }
     }
 }

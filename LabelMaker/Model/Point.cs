@@ -5,6 +5,5 @@
         public int Number { get; set; }
 
         public int Horizons { get; set; }
-    }
-  
+    }  
 }

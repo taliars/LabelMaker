@@ -10,26 +10,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="src\icon.ico" />
-    <None Remove="src\ttf\DejaVuSerif.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="itext7" Version="7.1.15" />
     <PackageReference Include="MahApps.Metro" Version="2.4.5" />
     <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="5.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="src\icon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="src\ttf\DejaVuSerif.ttf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +26,12 @@
 
   <ItemGroup>
     <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="src\icon.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="src\ttf\DejaVuSerif.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

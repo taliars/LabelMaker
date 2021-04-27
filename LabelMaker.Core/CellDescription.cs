@@ -1,6 +1,6 @@
 ﻿namespace LabelMaker.Core
 {
-    internal class CellDescription
+    public class CellDescription
     {
         public CellDescription(string content, CellPosition position, bool isBold = false)
         {

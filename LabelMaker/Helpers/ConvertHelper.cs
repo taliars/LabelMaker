@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 using LabelMaker.Core;
@@ -6,6 +7,22 @@ using LabelMaker.ViewModel;
 
 namespace LabelMaker.Helpers
 {
+    internal static class DocumentHelper
+    {
+        public static void OpenWithDefaultApp(string path)
+        {
+            var p = new Process
+            {
+                StartInfo = new ProcessStartInfo(path)
+                {
+                    UseShellExecute = true
+                }
+            };
+
+            p.Start();
+        }
+    }
+
     internal static class ConvertHelper
     {
         public static void UpdateWithNewPointCount(

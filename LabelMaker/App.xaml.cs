@@ -1,4 +1,6 @@
-﻿using LabelMaker.Configuration;
+﻿using LabelMaker.Core;
+using LabelMaker.Services.Contract;
+using LalelMaker.Services.Implementation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -37,6 +39,7 @@ namespace LabelMaker
         {
             services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
             services.AddTransient(typeof(MainWindow));
+            services.AddTransient<IPdfService, PdfService>();
         }
     }
 }

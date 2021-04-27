@@ -34,6 +34,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LabelMaker.Core\LabelMaker.Core.csproj" />
+    <ProjectReference Include="..\LabelMaker.Services.Contract\LabelMaker.Services.Contract.csproj" />
+    <ProjectReference Include="..\LalelMaker.Services.Implementation\LalelMaker.Services.Implementation.csproj" />
   </ItemGroup>
 
   <ItemGroup>

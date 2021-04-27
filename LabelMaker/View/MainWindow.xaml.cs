@@ -1,5 +1,6 @@
 ﻿using System.Windows;
-using LabelMaker.Configuration;
+using LabelMaker.Core;
+using LabelMaker.Services.Contract;
 using LabelMaker.ViewModel;
 
 using MahApps.Metro.Controls;
@@ -15,10 +16,10 @@ namespace LabelMaker
     {
         private readonly MainViewModel viewModel;
 
-        public MainWindow(IOptions<AppSettings> settings)
+        public MainWindow(IOptions<AppSettings> settings, IPdfService pdfService)
         {
             InitializeComponent();
-            viewModel = new MainViewModel(settings.Value);
+            viewModel = new MainViewModel(settings.Value, pdfService);
             this.DataContext = viewModel;
         }
 

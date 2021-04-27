@@ -1,4 +1,4 @@
-﻿namespace LabelMaker.Configuration
+﻿namespace LabelMaker.Core
 {
     public class AppSettings
     {

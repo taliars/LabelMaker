@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 
 using iText.IO.Font;
 using iText.Kernel.Font;
@@ -8,65 +7,21 @@ using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
-using LabelMaker.Configuration;
 using LabelMaker.Core;
 
-namespace LabelMaker.Helpers
+namespace LalelMaker.Services.Implementation
 {
-    internal static class PdfHelper
+    public static class PdfHelper
     {
-        private const string DEJAVUSerif = "./src/ttf/DejaVuSerif.ttf";
-        private const int DefaultFontSize = 14;
-        private const int DefaultRowSpan = 1;
-        private const int DefaultColumnSpan = 1;
-        private const int DefaultColumnCount = 1;
-
-        public static void CreateDocument(string path,
-            AppSettings appSettings,
-            string[] labelContents)
-        {
-            if (string.IsNullOrEmpty(path))
-            {
-                return;
-            }
-
-            var document = CreateDocumentTemplate(path, appSettings?.FontSize ?? DefaultFontSize);
-            var rowTableParagraph = new Paragraph();
-
-            foreach (var labelContent in labelContents)
-            {
-                var table = CreateTable(appSettings.Company, labelContent);
-                rowTableParagraph.Add(table);
-            }
-
-            document.Add(rowTableParagraph);
-            document.Close();
-
-            OpenDocumentWithDefaultViewer(path);
-        }
-
-        private static void OpenDocumentWithDefaultViewer(string path)
-        {
-            var p = new Process
-            {
-                StartInfo = new ProcessStartInfo(path)
-                {
-                    UseShellExecute = true
-                }
-            };
-
-            p.Start();
-        }
-
         // TODO: Margins to settings
-        private static Document CreateDocumentTemplate(string path, int fontSize)
+        public static Document CreateDocumentTemplate(string path, int fontSize)
         {
             // Must have write permissions to the path folder
             var writer = new PdfWriter(path);
             var pdf = new PdfDocument(writer);
             var document = new Document(pdf);
 
-            document.SetFont(CreateFont(DEJAVUSerif));
+            document.SetFont(CreateFont(DefaultSettings.FontFamily));
             document.SetFontSize(fontSize);
             document.SetLeftMargin(10f);
             document.SetRightMargin(10f);
@@ -74,7 +29,7 @@ namespace LabelMaker.Helpers
             return document;
         }
 
-        private static Table CreateTable(string company, string labelContent)
+        public static Table CreateTable(string company, string labelContent)
         {
             var cellDescriptions = new CellDescription[]
             {
@@ -83,7 +38,7 @@ namespace LabelMaker.Helpers
                 new CellDescription("Проба почвы (грунта)", CellPosition.Bottom),
             };
 
-            var table = new Table(DefaultColumnCount, false)
+            var table = new Table(DefaultSettings.ColumnCount, false)
                 .SetKeepTogether(true);
 
             foreach (var cellDescription in cellDescriptions)
@@ -103,7 +58,7 @@ namespace LabelMaker.Helpers
 
         private static Cell CreateCell(CellDescription cellDescription)
         {
-            var cell = new Cell(DefaultRowSpan, DefaultColumnSpan)
+            var cell = new Cell(DefaultSettings.RowSpan, DefaultSettings.ColumnSpan)
                 .SetTextAlignment(TextAlignment.CENTER)
                 .Add(new Paragraph(cellDescription.Content));
 
@@ -125,5 +80,4 @@ namespace LabelMaker.Helpers
             };
         }
     }
-
 }

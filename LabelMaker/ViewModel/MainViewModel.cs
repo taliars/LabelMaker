@@ -4,13 +4,17 @@ using System.ComponentModel;
 using System.Linq;
 
 using LabelMaker.Common;
-using LabelMaker.Configuration;
+using LabelMaker.Core;
 using LabelMaker.Helpers;
+using LabelMaker.Services.Contract;
 
 namespace LabelMaker.ViewModel
 {
     internal class MainViewModel : PropertyChangedBase
     {
+        private readonly AppSettings appSettings;
+        private readonly IPdfService pdfService;
+
         public MainInfoViewModel MainInfo { get; set; }
 
         public ObservableCollection<PointViewModel> Points { get; set; }
@@ -25,7 +29,7 @@ namespace LabelMaker.ViewModel
 
         public string Path { get; set; }
 
-        public MainViewModel(AppSettings appSettings)
+        public MainViewModel(AppSettings appSettings, IPdfService pdfService)
         {
             Points = new ObservableCollection<PointViewModel>();
             Horizons = new ObservableCollection<HorizonViewModel>();
@@ -34,8 +38,21 @@ namespace LabelMaker.ViewModel
 
             MainInfo = new MainInfoViewModel(appSettings.Company, CanPrint, UpdateHorizons, Points);
 
-            Print = new RelayCommand(o => PdfHelper.CreateDocument(Path, appSettings, Horizons.Select(x => x.LabelContent).ToArray()));
+            Print = new RelayCommand(o => CreatePdfDocument());
+            this.appSettings = appSettings;
+            this.pdfService = pdfService;
         }
+
+        private void CreatePdfDocument()
+        {
+            var horizons = Horizons.Select(x => x.LabelContent).ToArray();
+            var isDocumentCreated = pdfService.CreateDocument(Path, appSettings, horizons);
+
+            if (isDocumentCreated)
+            {
+                DocumentHelper.OpenWithDefaultApp(Path);
+            }
+        } 
 
         public void Points_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

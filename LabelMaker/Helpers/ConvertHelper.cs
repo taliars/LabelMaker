@@ -12,6 +12,11 @@ namespace LabelMaker.Helpers
     {
         public static void OpenWithDefaultApp(MemoryStream memoryStream, string path)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
             using (var file = new FileStream(path, FileMode.Create, FileAccess.Write))
             {
                 memoryStream.WriteTo(file);
@@ -46,7 +51,7 @@ namespace LabelMaker.Helpers
             {
                 var removePoints = pointCollection.Where(x => !newPointsNumbers.Contains(x.Number)).ToArray();
 
-                for (int i = 0; i < removePoints.Count(); i++)
+                for (int i = 0; i < removePoints.Length; i++)
                 {
                     pointCollection.Remove(removePoints[i]);
                 }

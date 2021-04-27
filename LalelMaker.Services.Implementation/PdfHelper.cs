@@ -22,7 +22,8 @@ namespace LalelMaker.Services.Implementation
             var pdf = new PdfDocument(writer);
             var document = new Document(pdf);
 
-            document.SetFont(CreateFont(DefaultSettings.FontFamily));
+            var font = CreateFont(DefaultSettings.FontFamily);
+            document.SetFont(font);
             document.SetFontSize(fontSize);
             document.SetLeftMargin(10f);
             document.SetRightMargin(10f);

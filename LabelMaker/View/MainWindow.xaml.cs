@@ -26,7 +26,10 @@ namespace LabelMaker
         {
             var dialog = new SaveFileDialog
             {
-                FileName = $"Этикетки {viewModel.MainInfo.OrderNumber}.pdf"
+                FileName = $"Этикетки {viewModel.MainInfo.OrderNumber}.pdf",
+                AddExtension = true,
+                Filter = "PDF Files (*.pdf)|*.pdf",
+                DefaultExt = "pdf"
             };
 
             if (dialog.ShowDialog() == true)

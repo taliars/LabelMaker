@@ -12,31 +12,40 @@ using LabelMaker.Configuration;
 
 namespace LabelMaker.Helpers
 {
-    public class PdfHelper
+    public static class PdfHelper
     {
         private const string DEJAVUSerif = "./src/ttf/DejaVuSerif.ttf";
+        private const int DefaultFontSize = 14;
         private const int DefaultRowSpan = 1;
         private const int DefaultColumnSpan = 1;
         private const int DefaultColumnCount = 1;
 
-        public PdfHelper(string path,
+        public static void CreateDocument(string path,
             AppSettings appSettings,
             string[] labelContents)
         {
-            var document = CreateDocument(path, appSettings.FontSize);
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
 
-            var paragraph = new Paragraph();
+            var document = CreateDocumentTemplate(path, appSettings?.FontSize ?? DefaultFontSize);
+            var rowTableParagraph = new Paragraph();
 
             foreach (var labelContent in labelContents)
             {
                 var table = CreateTable(appSettings.Company, labelContent);
-                paragraph.Add(table);
+                rowTableParagraph.Add(table);
             }
 
-            document.Add(paragraph);
-
+            document.Add(rowTableParagraph);
             document.Close();
 
+            OpenDocumentWithDefaultViewer(path);
+        }
+
+        private static void OpenDocumentWithDefaultViewer(string path)
+        {
             var p = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
@@ -48,7 +57,8 @@ namespace LabelMaker.Helpers
             p.Start();
         }
 
-        private static Document CreateDocument(string path, int fontSize)
+        // TODO: Margins to settings
+        private static Document CreateDocumentTemplate(string path, int fontSize)
         {
             // Must have write permissions to the path folder
             var writer = new PdfWriter(path);
@@ -67,26 +77,14 @@ namespace LabelMaker.Helpers
         {
             var cellDescriptions = new CellDescription[]
             {
-                new CellDescription
-                {
-                    Content = company,
-                    CellPosition = CellPosition.Top,
-                },
-                new CellDescription
-                {
-                    Content = $"Проба № {labelContent}",
-                    CellPosition = CellPosition.Central,
-                },
-                new CellDescription
-                {
-                    Content ="Проба почвы (грунта)",
-                    CellPosition = CellPosition.Bottom
-                },
+                new CellDescription(company, CellPosition.Top),
+                new CellDescription($"Проба № {labelContent}", CellPosition.Central),
+                new CellDescription("Проба почвы (грунта)", CellPosition.Bottom),
             };
 
             var table = new Table(DefaultColumnCount, false)
                 .SetKeepTogether(true);
-           
+
             foreach (var cellDescription in cellDescriptions)
             {
                 var cell = CreateCell(cellDescription);

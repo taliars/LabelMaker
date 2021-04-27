@@ -1,9 +1,12 @@
 ﻿using LabelMaker.Core;
 
+using System.IO;
+using System.Threading.Tasks;
+
 namespace LabelMaker.Services.Contract
 {
     public interface IPdfService
     {
-        bool CreateDocument(string path, AppSettings appSettings, string[] labelContents);
+        Task<MemoryStream> CreateDocument(AppSettings appSettings, string[] labelContents);
     }
 }

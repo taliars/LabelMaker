@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 using LabelMaker.Core;
@@ -9,8 +10,18 @@ namespace LabelMaker.Helpers
 {
     internal static class DocumentHelper
     {
-        public static void OpenWithDefaultApp(string path)
+        public static void OpenWithDefaultApp(MemoryStream memoryStream, string path)
         {
+            if (string.IsNullOrEmpty(path))
+            {
+                return;
+            }
+
+            using (var file = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                memoryStream.WriteTo(file);
+            }
+
             var p = new Process
             {
                 StartInfo = new ProcessStartInfo(path)
@@ -40,7 +51,7 @@ namespace LabelMaker.Helpers
             {
                 var removePoints = pointCollection.Where(x => !newPointsNumbers.Contains(x.Number)).ToArray();
 
-                for (int i = 0; i < removePoints.Count(); i++)
+                for (int i = 0; i < removePoints.Length; i++)
                 {
                     pointCollection.Remove(removePoints[i]);
                 }

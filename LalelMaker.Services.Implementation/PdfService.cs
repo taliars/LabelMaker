@@ -1,23 +1,18 @@
-﻿using System.Diagnostics;
-using iText.Layout;
-using iText.Layout.Element;
+﻿using iText.Layout.Element;
 using LabelMaker.Core;
 using LabelMaker.Services.Contract;
+using System.IO;
 
 namespace LalelMaker.Services.Implementation
 {
-    public class PdfService: IPdfService
+    public class PdfService : IPdfService
     {
-        public bool CreateDocument(string path,
-            AppSettings appSettings,
-            string[] labelContents)
+        public MemoryStream CreateDocument(AppSettings appSettings, string[] labelContents)
         {
-            if (string.IsNullOrEmpty(path))
-            {
-                return false ;
-            }
+            var memoryStream = new MemoryStream();
 
-            var document = PdfHelper.CreateDocumentTemplate(path, appSettings?.FontSize ?? DefaultSettings.FontSize);
+            var fontSize = appSettings?.FontSize ?? DefaultSettings.FontSize;
+            var document = PdfHelper.CreateDocumentTemplate(memoryStream, fontSize);
             var rowTableParagraph = new Paragraph();
 
             foreach (var labelContent in labelContents)
@@ -28,8 +23,10 @@ namespace LalelMaker.Services.Implementation
 
             document.Add(rowTableParagraph);
             document.Close();
+            memoryStream.Flush();
+            memoryStream.Position = 0;
 
-            return true;
+            return memoryStream;
         }
     }
 }

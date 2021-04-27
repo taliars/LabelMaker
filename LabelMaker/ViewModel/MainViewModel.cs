@@ -46,12 +46,9 @@ namespace LabelMaker.ViewModel
         private void CreatePdfDocument()
         {
             var horizons = Horizons.Select(x => x.LabelContent).ToArray();
-            var isDocumentCreated = pdfService.CreateDocument(Path, appSettings, horizons);
+            var docStream = pdfService.CreateDocument(appSettings, horizons);
 
-            if (isDocumentCreated)
-            {
-                DocumentHelper.OpenWithDefaultApp(Path);
-            }
+            DocumentHelper.OpenWithDefaultApp(docStream, Path);
         } 
 
         public void Points_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)

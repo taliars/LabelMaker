@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-
+using System.IO;
 using iText.IO.Font;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
@@ -14,10 +14,11 @@ namespace LalelMaker.Services.Implementation
     public static class PdfHelper
     {
         // TODO: Margins to settings
-        public static Document CreateDocumentTemplate(string path, int fontSize)
+        public static Document CreateDocumentTemplate(MemoryStream memoryStream, int fontSize)
         {
             // Must have write permissions to the path folder
-            var writer = new PdfWriter(path);
+            var writer = new PdfWriter(memoryStream);
+            writer.SetCloseStream(false);
             var pdf = new PdfDocument(writer);
             var document = new Document(pdf);
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 
 using LabelMaker.Core;
@@ -9,8 +10,13 @@ namespace LabelMaker.Helpers
 {
     internal static class DocumentHelper
     {
-        public static void OpenWithDefaultApp(string path)
+        public static void OpenWithDefaultApp(MemoryStream memoryStream, string path)
         {
+            using (var file = new FileStream(path, FileMode.Create, FileAccess.Write))
+            {
+                memoryStream.WriteTo(file);
+            }
+
             var p = new Process
             {
                 StartInfo = new ProcessStartInfo(path)

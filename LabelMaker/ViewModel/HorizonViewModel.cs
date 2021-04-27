@@ -1,9 +1,9 @@
 ﻿using LabelMaker.Common;
-using LabelMaker.Model;
+using LabelMaker.Core;
 
 namespace LabelMaker.ViewModel
 {
-    public class HorizonViewModel : PropertyChangedBase
+    internal class HorizonViewModel : PropertyChangedBase
     {
         private readonly Horizon horizon;
 

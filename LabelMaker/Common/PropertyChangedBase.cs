@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace LabelMaker.Common
 {
-    public class PropertyChangedBase: INotifyPropertyChanged
+    internal class PropertyChangedBase: INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

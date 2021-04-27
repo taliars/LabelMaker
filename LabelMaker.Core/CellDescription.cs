@@ -1,4 +1,4 @@
-﻿namespace LabelMaker.Helpers
+﻿namespace LabelMaker.Core
 {
     internal class CellDescription
     {

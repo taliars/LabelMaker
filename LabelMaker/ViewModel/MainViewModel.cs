@@ -9,7 +9,7 @@ using LabelMaker.Helpers;
 
 namespace LabelMaker.ViewModel
 {
-    public class MainViewModel : PropertyChangedBase
+    internal class MainViewModel : PropertyChangedBase
     {
         public MainInfoViewModel MainInfo { get; set; }
 

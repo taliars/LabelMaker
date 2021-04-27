@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-using LabelMaker.Model;
+using LabelMaker.Core;
 using LabelMaker.ViewModel;
 
 namespace LabelMaker.Helpers
 {
-    public static class ConvertHelper
+    internal static class ConvertHelper
     {
         public static void UpdateWithNewPointCount(
             this ICollection<PointViewModel> pointCollection,

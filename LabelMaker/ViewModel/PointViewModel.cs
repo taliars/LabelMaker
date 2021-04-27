@@ -1,9 +1,9 @@
 ﻿using LabelMaker.Common;
-using LabelMaker.Model;
+using LabelMaker.Core;
 
 namespace LabelMaker.ViewModel
 {
-    public class PointViewModel : PropertyChangedBase
+    internal class PointViewModel : PropertyChangedBase
     {
         private readonly Point point;
 

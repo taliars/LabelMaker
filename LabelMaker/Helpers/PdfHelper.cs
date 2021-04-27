@@ -9,10 +9,11 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using LabelMaker.Configuration;
+using LabelMaker.Core;
 
 namespace LabelMaker.Helpers
 {
-    public static class PdfHelper
+    internal static class PdfHelper
     {
         private const string DEJAVUSerif = "./src/ttf/DejaVuSerif.ttf";
         private const int DefaultFontSize = 14;

@@ -1,4 +1,6 @@
-﻿namespace LabelMaker.Model
+﻿using System;
+
+namespace LabelMaker.Core
 {
     public class Horizon
     {
@@ -6,5 +8,4 @@
 
         public int PointNumber { get; set; }
     }
-  
 }

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 using LabelMaker.Common;
 using LabelMaker.Helpers;
-using LabelMaker.Model;
+using LabelMaker.Core;
 
 namespace LabelMaker.ViewModel
 {
-    public class MainInfoViewModel : PropertyChangedBase
+    internal class MainInfoViewModel : PropertyChangedBase
     {
         private readonly MainInfo mainInfo;
         private readonly bool CanPrint;

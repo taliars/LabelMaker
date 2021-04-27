@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 
 using LabelMaker.Common;
 using LabelMaker.Core;
@@ -38,15 +39,15 @@ namespace LabelMaker.ViewModel
 
             MainInfo = new MainInfoViewModel(appSettings.Company, CanPrint, UpdateHorizons, Points);
 
-            Print = new RelayCommand(o => CreatePdfDocument());
+            Print = new RelayCommand(async o => await CreatePdfDocument());
             this.appSettings = appSettings;
             this.pdfService = pdfService;
         }
 
-        private void CreatePdfDocument()
+        private async Task CreatePdfDocument()
         {
             var horizons = Horizons.Select(x => x.LabelContent).ToArray();
-            var docStream = pdfService.CreateDocument(appSettings, horizons);
+            var docStream = await pdfService.CreateDocument(appSettings, horizons);
 
             DocumentHelper.OpenWithDefaultApp(docStream, Path);
         } 

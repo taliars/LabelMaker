@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using LabelMaker.Services.Contract;
-using System.IO;
+using System.Threading.Tasks;
+using LabelMaker.Core;
+using LabelMaker.API.Entites;
 
 namespace LabelMaker.API.Controllers
 {
@@ -15,19 +17,15 @@ namespace LabelMaker.API.Controllers
             this.pdfService = pdfService;
         }
 
-        [HttpGet]
-        public IActionResult Get()
+        [HttpPost]
+        public async Task<FileStreamResult> Get(DocumentQuery query)
         {
-            var appSettings = new LabelMaker.Core.AppSettings
+            var stream = await pdfService.CreateDocument(query.AppSettings, query.LabelContents);
+            
+            return new FileStreamResult(stream, "application/pdf")
             {
-                Company = "Рога и копыта",
+                FileDownloadName = $"{query.Order}.pdf"
             };
-
-            var labelContents = new string[] { "asdasd", "1-1-1", "1-2-1", "1-1-1m" };
-
-            var ms = pdfService.CreateDocument(appSettings, labelContents);
-
-            return File(ms, "application/pdf", "result.pdf");
         }
     }
 }
